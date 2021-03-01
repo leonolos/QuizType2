@@ -76,8 +76,26 @@ public class AdminStudentTabController implements Initializable {
         this.mobilNumber.clear();
     }
 
+    private String validate(Student student) {
+        String message = null;
+//        Pattern p = Pattern.compile("^(\\w+([_.]{1}\\w+)*@\\w+([_.]{1}\\w+)*\\.[A-Za-z]{2,3}[;]?)*$");
+
+        if (student.getFirstName().length() < 4) {
+            message = "Le prénom doit avoir plus de 4 caractères";
+        } else if (student.getLastName().length() < 2) {
+            message = "Le nom doit avoir plus de 4 caractères";
+//        } else if (!p.matcher("email").matches()) {
+//            message = "Entrez un Email valide s'il vous plaît";
+        } else if (student.getPassword().length() <= 6) {
+            message = "Le mot de passe doit être plus de 6 caractères";
+        } else if (student.getMobile().length() < 10) {
+            message = "Entrez un numéro de contact valide";
+        }
+        return message;
+    }
+
     @FXML
-    private void saveStudent(ActionEvent event) {
+    public void saveStudent(ActionEvent event) {
         System.out.println("Button Clicked...");
 
         String firstName = this.firstName.getText().trim();
@@ -94,19 +112,15 @@ public class AdminStudentTabController implements Initializable {
         }
 
         String message = null;
-//        Pattern p = Pattern.compile("^(\\w+([_.]{1}\\w+)*@\\w+([_.]{1}\\w+)*\\.[A-Za-z]{2,3}[;]?)*$");
 
-        if (firstName.length() < 4) {
-            message = "Le prénom doit avoir plus de 4 caractères";
-        } else if (lastName.length() < 2) {
-            message = "Le nom doit avoir plus de 4 caractères";
-//        } else if (!p.matcher("email").matches()) {
-//            message = "Entrez un Email valide s'il vous plaît";
-        } else if (password.length() <= 6) {
-            message = "Le mot de passe doit être plus de 6 caractères";
-        } else if (mobile.length() < 10) {
-            message = "Entrez un numéro de contact valide";
-        }
+        Student s = new Student(
+                firstName,
+                lastName,
+                mobile,
+                gen,
+                email,
+                password);
+        message = this.validate(s);
 
         if (message != null) {
             Notifications.create()
@@ -115,14 +129,6 @@ public class AdminStudentTabController implements Initializable {
                     .showWarning();
             return;
         }
-        //save student
-        Student s = new Student(
-                firstName,
-                lastName,
-                mobile,
-                gen,
-                email,
-                password);
 
         System.out.println(s);
 
@@ -134,7 +140,7 @@ public class AdminStudentTabController implements Initializable {
             return;
         }
         s = s.save();
-        System.out.println(s);
+
         if (s != null) {
             Notifications.create()
                     .text("Etudiant inscrit...")

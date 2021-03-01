@@ -182,7 +182,7 @@ public class Student {
 
         String query = String.format("select *from %s where %s=?;",
                 MetaData.TABLE_NAME,
-                MetaData.EMAIL);
+                MetaData.FIRST_NAME); //On remplacera par MetaData.EMAIL
 
         String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
         try {
@@ -191,7 +191,7 @@ public class Student {
 
                 PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 
-                ps.setString(1, this.email);
+                ps.setString(1, this.firstName);//On remplacera par this.email
                 ResultSet result = ps.executeQuery();
                 if (result.next()) {
                     return true;
