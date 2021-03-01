@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
@@ -13,6 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import models.Student;
 import org.controlsfx.control.Notifications;
 
 public class AdminStudentTabController implements Initializable {
@@ -66,6 +68,14 @@ public class AdminStudentTabController implements Initializable {
         toggleGroup = new ToggleGroup();
     }
 
+    private void resetForm() {
+        this.password.clear();
+        this.email.clear();
+        this.firstName.clear();
+        this.lastName.clear();
+        this.mobilNumber.clear();
+    }
+
     @FXML
     private void saveStudent(ActionEvent event) {
         System.out.println("Button Clicked...");
@@ -75,23 +85,23 @@ public class AdminStudentTabController implements Initializable {
         String mobile = this.mobilNumber.getText().trim();
         String email = this.email.getText().trim();
         String password = this.password.getText().trim();
-        String stringGender = "Male";
+        Character gen = 'M';
         RadioButton gender = (RadioButton) toggleGroup.getSelectedToggle();
         if (gender != null) {
             if (gender == female) {
-                stringGender = "Female";
+                gen = 'F';
             }
         }
 
         String message = null;
-          Pattern p = Pattern.compile("^(\\w+([_.]{1}\\w+)*@\\w+([_.]{1}\\w+)*\\.[A-Za-z]{2,3}[;]?)*$");
-       
+//        Pattern p = Pattern.compile("^(\\w+([_.]{1}\\w+)*@\\w+([_.]{1}\\w+)*\\.[A-Za-z]{2,3}[;]?)*$");
+
         if (firstName.length() < 4) {
             message = "Le prénom doit avoir plus de 4 caractères";
         } else if (lastName.length() < 2) {
             message = "Le nom doit avoir plus de 4 caractères";
-        } else if (!(p.matcher("email").matches())) {
-            message = "Entrez un Email valide s'il vous plaît";
+//        } else if (!p.matcher("email").matches()) {
+//            message = "Entrez un Email valide s'il vous plaît";
         } else if (password.length() <= 6) {
             message = "Le mot de passe doit être plus de 6 caractères";
         } else if (mobile.length() < 10) {
@@ -102,15 +112,34 @@ public class AdminStudentTabController implements Initializable {
             Notifications.create()
                     .title("S'il vous plaît, remplir correctement le formulaire")
                     .text(message)
-                    .showError();
+                    .showWarning();
             return;
         }
+        //save student
+        Student s = new Student(
+                firstName,
+                lastName,
+                mobile,
+                gen,
+                email,
+                password);
 
-        //save code will be here
-        System.out.println(firstName + "\n"
-                + lastName + "\n"
-                + mobile + "\n"
-                + stringGender);
+        boolean result = s.save();
+        if (result) {
+            Notifications.create()
+                    .text("Etudiant inscrit...")
+                    .title("Succès")
+                    .position(Pos.TOP_RIGHT)
+                    .showInformation();
+            this.resetForm();
+        } else {
+            Notifications.create()
+                    .text("Inscription échoué...")
+                    .title("Echoué")
+                    .position(Pos.TOP_RIGHT)
+                    .showError();
+        }
+
     }
 
 }
