@@ -124,8 +124,10 @@ public class AdminStudentTabController implements Initializable {
                 email,
                 password);
 
-        boolean result = s.save();
-        if (result) {
+        System.out.println(s);
+        s=s.save();
+        System.out.println(s);
+        if (s!=null) {
             Notifications.create()
                     .text("Etudiant inscrit...")
                     .title("Succès")
