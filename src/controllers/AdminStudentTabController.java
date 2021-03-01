@@ -125,9 +125,17 @@ public class AdminStudentTabController implements Initializable {
                 password);
 
         System.out.println(s);
-        s=s.save();
+
+        if (s.isExists()) {
+            Notifications.create()
+                    .title("Enregistrement échoué")
+                    .text("Cet étudiant existe déjà!")
+                    .showError();
+            return;
+        }
+        s = s.save();
         System.out.println(s);
-        if (s!=null) {
+        if (s != null) {
             Notifications.create()
                     .text("Etudiant inscrit...")
                     .title("Succès")

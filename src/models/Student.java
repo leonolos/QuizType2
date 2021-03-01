@@ -136,21 +136,21 @@ public class Student {
             System.out.println("models.Student.createTable()");
             System.out.println(b);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
 //Save student
 
     public Student save() {
-        String raw="INSERT into students (%s,%s,%s,%s,%s,%s)\n"
+        String raw = "INSERT into students (%s,%s,%s,%s,%s,%s)\n"
                 + "values(?,?,?,?,?,?);";
-        String query=String.format(raw, 
+        String query = String.format(raw,
                 MetaData.FIRST_NAME,
                 MetaData.LAST_NAME,
                 MetaData.MOBILE,
                 MetaData.EMAIL,
                 MetaData.PASSWORD,
-                MetaData.GENDER);       
+                MetaData.GENDER);
         String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -164,11 +164,11 @@ public class Student {
                 ps.setString(5, this.password);
                 ps.setString(6, String.valueOf(this.gender));
                 int i = ps.executeUpdate();
-                ResultSet keys=ps.getGeneratedKeys();
-                if(keys.next()){
-                this.id=keys.getInt(1);
-                }                
-                
+                ResultSet keys = ps.getGeneratedKeys();
+                if (keys.next()) {
+                    this.id = keys.getInt(1);
+                }
+
                 System.out.println("Update Rows: " + i);
                 return this;
             }
@@ -176,5 +176,30 @@ public class Student {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isExists() {
+
+        String query = String.format("select *from %s where %s=?;",
+                MetaData.TABLE_NAME,
+                MetaData.EMAIL);
+
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        try {
+            Class.forName("org.sqlite.JDBC");
+            try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                
+                ps.setString(1, this.email);
+                ResultSet result = ps.executeQuery();
+                if (result.next()) {
+                    return true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 }
