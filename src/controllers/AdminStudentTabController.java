@@ -90,7 +90,7 @@ public class AdminStudentTabController implements Initializable {
             message = "Le prénom doit avoir plus de 4 caractères";
         } else if (lastName.length() < 2) {
             message = "Le nom doit avoir plus de 4 caractères";
-        } else if (!p.matcher("email").matches()) {
+        } else if (!(p.matcher("email").matches())) {
             message = "Entrez un Email valide s'il vous plaît";
         } else if (password.length() <= 6) {
             message = "Le mot de passe doit être plus de 6 caractères";
