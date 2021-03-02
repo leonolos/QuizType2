@@ -15,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeView;
 import javafx.util.Duration;
 import models.Question;
 import models.Quiz;
@@ -50,10 +51,13 @@ public class AddQuizFXMLController implements Initializable {
     private ToggleGroup radioGroup;
     @FXML
     private Button setQuizTitleButton;
+    @FXML
+    private TreeView<?> treeView;
 
     //my variable
     private Quiz quiz = null;
     private ArrayList<Question> questions = new ArrayList<>();
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

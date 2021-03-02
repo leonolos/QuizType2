@@ -1,6 +1,7 @@
 package controllers;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import models.Student;
 import org.controlsfx.control.Notifications;
 
@@ -32,21 +34,21 @@ public class AdminStudentTabController implements Initializable {
     @FXML
     private Button saveButton;
     @FXML
-    private TableView<?> studentTable;
+    private TableView<Student> studentTable;
     @FXML
-    private TableColumn<?, ?> studentIdColumn;
+    private TableColumn<Student, String> studentIdColumn;
     @FXML
-    private TableColumn<?, ?> firstNameColumn;
+    private TableColumn<Student, String> firstNameColumn;
     @FXML
-    private TableColumn<?, ?> lastNameColumn;
+    private TableColumn<Student, String> lastNameColumn;
     @FXML
-    private TableColumn<?, ?> mobilNumberColumn;
+    private TableColumn<Student, String> mobilNumberColumn;
     @FXML
-    private TableColumn<?, ?> genderColumn;
+    private TableColumn<Student, Character> genderColumn;
     @FXML
-    private TableColumn<?, ?> emailColumn;
+    private TableColumn<Student, String> emailColumn;
     @FXML
-    private TableColumn<?, ?> passwordColumn;
+    private TableColumn<Student, String> passwordColumn;
     @FXML
     private TextField email;
     @FXML
@@ -54,13 +56,28 @@ public class AdminStudentTabController implements Initializable {
 
 //No FXML Variables
     private ToggleGroup toggleGroup;
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         initAll();
         radioButtonSetup();
+        renderTable();
+    }
+
+    private void renderTable() {
+        List<Student> students = Student.getAll();
+        studentTable.getItems().clear();
+        
+        this.studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        this.firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        this.lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        this.mobilNumberColumn.setCellValueFactory(new PropertyValueFactory<>("mobile"));
+        this.emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        this.passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        this.genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        
+        studentTable.getItems().addAll(students);
     }
 
     private void radioButtonSetup() {
@@ -153,6 +170,8 @@ public class AdminStudentTabController implements Initializable {
                     .position(Pos.TOP_RIGHT)
                     .showInformation();
             this.resetForm();
+            
+            studentTable.getItems().add(0, s);
         } else {
             Notifications.create()
                     .text("Inscription échoué...")
