@@ -44,12 +44,17 @@ public class AdminStudentTabController implements Initializable {
     @FXML
     private TableColumn<?, ?> genderColumn;
     @FXML
+    private TableColumn<?, ?> emailColumn;
+    @FXML
+    private TableColumn<?, ?> passwordColumn;
+    @FXML
     private TextField email;
     @FXML
     private PasswordField password;
 
 //No FXML Variables
     private ToggleGroup toggleGroup;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
