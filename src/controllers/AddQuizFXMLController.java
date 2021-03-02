@@ -3,6 +3,8 @@ package controllers;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Duration;
 import models.Question;
@@ -57,12 +60,37 @@ public class AddQuizFXMLController implements Initializable {
     //my variable
     private Quiz quiz = null;
     private ArrayList<Question> questions = new ArrayList<>();
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         radioButtonSetup();
+        renderTreeView();
+    }
+
+    private void renderTreeView() {
+        Map<Quiz, List<Question>> data = Quiz.getAll();
+        Set<Quiz> quizzes = data.keySet();
+
+        TreeItem root = new TreeItem("Quizzes");
+        for (Quiz q : quizzes) {
+            TreeItem quizTreeItem = new TreeItem(q);
+
+            List<Question> questions = data.get(q);
+            for (Question question : questions) {
+                TreeItem questionTreeItem = new TreeItem(question);
+                questionTreeItem.getChildren().add(new TreeItem("A : " + question.getOption1()));
+                questionTreeItem.getChildren().add(new TreeItem("B : " + question.getOption2()));
+                questionTreeItem.getChildren().add(new TreeItem("C : " + question.getOption3()));
+                questionTreeItem.getChildren().add(new TreeItem("D : " + question.getOption4()));
+                questionTreeItem.getChildren().add(new TreeItem("Ans : " + question.getAnswer()));
+                quizTreeItem.getChildren().add(questionTreeItem);
+            }
+            quizTreeItem.setExpanded(true);
+            root.getChildren().add(quizTreeItem);
+        }
+        root.setExpanded(true);
+        this.treeView.setRoot(root);
     }
 
     private void radioButtonSetup() {

@@ -44,6 +44,11 @@ public class Question {
         this.answer = answer;
     }
 
+    @Override
+    public String toString() {
+        return this.question;
+    }
+
     //Getters
     public Quiz getQuiz() {
         return quiz;
@@ -149,7 +154,7 @@ public class Question {
         }
     }
 
-    public boolean save() { 
+    public boolean save() {
         boolean flag = false;
         //String raw = "INSERT INTO questions (question,option1,option2,option3,option4,answer,quiz_id)values(?,?,?,?,?,?,?)";
         String raw = "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s)VALUES(?,?,?,?,?,?,?)";
