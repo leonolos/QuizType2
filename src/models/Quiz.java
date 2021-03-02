@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Quiz {
 
@@ -55,10 +59,6 @@ public class Quiz {
     public static void createTable() {
 
         try {
-//            String query = "CREATE TABLE quiz (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT);";
-            //Ici table_Name --> quizs
-            //CREATE TABLE quizs (quiz_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT)
-
             String raw = "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT);";
             String query = String.format(raw, MetaData.TABLE_NAME, MetaData.QUIZ_ID, MetaData.TITLE);
             System.err.println(query);
@@ -73,7 +73,7 @@ public class Quiz {
             System.out.println(b);
             connection.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -106,9 +106,103 @@ public class Quiz {
         this.quizId = this.save();
 
         for (Question q : questions) {
-            flag=flag && q.save();    
+            flag = flag && q.save();
             System.out.println(flag);
         }
         return flag;
+    }
+
+    public static Map<Quiz, List<Question>> getAll() {
+        Map<Quiz, List<Question>> quizes = new HashMap<>();
+        Quiz key = null;
+
+//        SELECT quizs.quiz_id, title,id, question,option1, 
+//option2,option3, option4,answer FROM quizs join questions 
+//on questions.quiz_id=quizs.quiz_id
+        String query = String.
+                format("SELECT %s.%s, %s,"
+                        + "%s, %s,"
+                        + "%s, %s,"
+                        + "%s, %s,"
+                        + "%s "
+                        + "FROM %s join %s on %s.%s=%s.%s",
+                        MetaData.TABLE_NAME,
+                        MetaData.QUIZ_ID,
+                        MetaData.TITLE,
+                        Question.MetaData.QUESTION_ID,
+                        Question.MetaData.QUESTION,
+                        Question.MetaData.OPTION1,
+                        Question.MetaData.OPTION2,
+                        Question.MetaData.OPTION3,
+                        Question.MetaData.OPTION4,
+                        Question.MetaData.ANSWER,
+                        MetaData.TABLE_NAME,
+                        Question.MetaData.TABLE_NAME,
+                        Question.MetaData.TABLE_NAME,
+                        Question.MetaData.QUIZ_ID,
+                        MetaData.TABLE_NAME,
+                        MetaData.QUIZ_ID
+                );
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        System.out.println(query);
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+
+                PreparedStatement ps = connection.prepareStatement(query);
+                ResultSet result = ps.executeQuery();
+
+                while (result.next()) {
+                    Quiz temp = new Quiz();
+                    temp.setQuizId(result.getInt(1));
+                    temp.setTitle(result.getString(2));
+
+                    Question tempQuestion = new Question();
+                    tempQuestion.setQuestionId(result.getInt(3));
+                    tempQuestion.setQuestion(result.getString(4));
+                    tempQuestion.setOption1(result.getString(5));
+                    tempQuestion.setOption2(result.getString(6));
+                    tempQuestion.setOption3(result.getString(7));
+                    tempQuestion.setOption4(result.getString(8));
+                    tempQuestion.setAnswer(result.getString(9));
+
+                    if (key != null && key.equals(temp)) {
+                        quizes.get(key).add(tempQuestion);
+                    } else {
+                        ArrayList<Question> value = new ArrayList<>();
+                        value.add(tempQuestion);
+                        quizes.put(temp, value);
+                    }
+                    key = temp;
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return quizes;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Quiz)) {
+            return false;
+        }
+        Quiz t = (Quiz) obj;
+
+        if (this.quizId == t.quizId) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(quizId, title);
     }
 }

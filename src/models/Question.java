@@ -21,6 +21,7 @@ public class Question {
 
         public static final String TABLE_NAME = "questions";
         public static final String QUESTION = "question";
+        public static final String QUESTION_ID = "id";
         public static final String OPTION1 = "option1";
         public static final String OPTION2 = "option2";
         public static final String OPTION3 = "option3";
@@ -111,7 +112,7 @@ public class Question {
 
     //Other Methods
     public static void createTable() {
-        String raw = "CREATE TABLE %s (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,"
+        String raw = "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,"
                 + "%s TEXT ,"
                 + "%s TEXT ,"
                 + "%s TEXT ,"
@@ -120,7 +121,8 @@ public class Question {
                 + "%s INTEGER ,"
                 + "FOREIGN KEY (%s) REFERENCES %s(%s))";
 
-        String query = String.format(raw, MetaData.TABLE_NAME,
+        String query = String.format(raw, MetaData.QUESTION_ID,
+                MetaData.TABLE_NAME,
                 MetaData.OPTION1,
                 MetaData.OPTION2,
                 MetaData.OPTION3,
