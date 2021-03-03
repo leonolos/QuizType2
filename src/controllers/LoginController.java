@@ -1,6 +1,7 @@
-package quiztype;
+package controllers;
 
 import constants.AdminEmailPassword;
+import exceptions.LoginException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,21 +18,25 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.Student;
+import org.controlsfx.control.Notifications;
 
-public class AdminLoginController implements Initializable {
+public class LoginController implements Initializable {
 
     @FXML
     private TextField adminEmail;
     @FXML
     private PasswordField adminPassword;
     @FXML
-    private Button adminLoginButton;
-    @FXML
     private TextField studentEmail;
     @FXML
     private PasswordField studentPassword;
     @FXML
     private Button studentLoginButton;
+    @FXML
+    private Button adminLoginButton;
+    @FXML
+    private TextField studentFirstName;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -67,6 +72,19 @@ public class AdminLoginController implements Initializable {
     @FXML
     private void loginStudent(ActionEvent event) {
         System.out.println("On a cliqué sur le bouton StudentAdmin");
+
+        Student s = new Student(this.studentFirstName.getText(), this.studentPassword.getText());
+        try {
+            s.login();
+            System.out.println(s);
+        } catch (Exception ex) {
+            if (ex instanceof LoginException) {
+                Notifications.create()
+                        .title("Login Failed...")
+                        .text("Prénom ou mot de passe incorrecte")
+                        .showError();
+            }
+        }
     }
 
 }

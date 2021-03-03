@@ -1,9 +1,11 @@
 package models;
 
+import exceptions.LoginException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -54,6 +56,12 @@ public class Student {
         this.gender = gender;
         this.email = email;
         this.password = password;
+    }
+
+    public Student(String firstName, String password) {
+        this.firstName = firstName;
+        this.password = password;
+        //On rempacera firstName par email. 
     }
 
     public Integer getId() {
@@ -150,8 +158,8 @@ public class Student {
             System.out.println(ex.getMessage());
         }
     }
-//Save student
 
+//Save student
     public Student save() {
         String raw = "INSERT into students (%s,%s,%s,%s,%s,%s)\n"
                 + "values(?,?,?,?,?,?);";
@@ -256,5 +264,42 @@ public class Student {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    public void login() throws SQLException, ClassNotFoundException, LoginException {
+
+        String query = String.format("select %s , %s , %s , %s , %s"
+                + " from %s where %s=? and %s=?;",
+                MetaData.ID,
+                //                MetaData.FIRST_NAME,
+                MetaData.LAST_NAME,
+                MetaData.MOBILE,
+                MetaData.EMAIL,
+                MetaData.GENDER,
+                MetaData.TABLE_NAME,
+                MetaData.FIRST_NAME, //On remplacera par MetaData.EMAIL
+                MetaData.PASSWORD);
+
+        System.out.println(query);
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        Class.forName("org.sqlite.JDBC");
+        try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, this.firstName);//On remplacera par this.email
+            ps.setString(2, this.password);
+
+            ResultSet result = ps.executeQuery();
+            if (result.next()) {
+                this.setId(result.getInt(1));
+//                    this.setFirstName(result.getString(2));
+                this.setLastName(result.getString(2));
+                this.setMobile(result.getString(3));
+                this.setEmail(result.getString(4));
+                this.setGender(result.getString(5).charAt(0));
+            } else {
+                throw new LoginException("Login Failed...");
+            }
+        }
     }
 }

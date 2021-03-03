@@ -7,10 +7,14 @@ import models.Student;
 
 public class Test {
 
-    public static void main(String[] args) {
-        System.out.println(Student.getAll());
-        System.out.println(Student.getAll().size());
-    
+    public static void main(String[] args) throws Exception {
+//        new Student().login();
+//        Student s = new Student("SoloV","123456");
+//        System.out.println(s);
+//        s.login();
+//        System.out.println(s);
+
+
     }
 
 }
