@@ -77,6 +77,17 @@ public class LoginController implements Initializable {
         try {
             s.login();
             System.out.println(s);
+            
+             try {
+                Parent root = FXMLLoader.load(getClass().
+                        getResource("/fxml/student/StudentMainScreen.fxml"));
+                Stage stage = (Stage) studentPassword.getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+                
+            }
         } catch (Exception ex) {
             if (ex instanceof LoginException) {
                 Notifications.create()
