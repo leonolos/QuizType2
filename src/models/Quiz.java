@@ -184,6 +184,55 @@ public class Quiz {
         return quizes;
     }
 
+    public static Map<Quiz, Integer> getAllWithQuestionCount() {
+        Map<Quiz, Integer> quizes = new HashMap<>();
+        Quiz key = null;
+        
+        //SELECT quizs.quiz_id, title, 
+        //COUNT(*) as question_count 
+        //FROM quizs join questions on questions.quiz_id=quizs.quiz_id 
+        //GROUP BY quizs.quiz_id
+        String query = String.
+                format("SELECT %s.%s, %s,"
+                        + " COUNT(*) as question_count"
+                        + " FROM %s join %s on %s.%s=%s.%s"
+                        + " GROUP BY quizs.quiz_id",
+                        MetaData.TABLE_NAME,
+                        MetaData.QUIZ_ID,
+                        MetaData.TITLE,
+                        MetaData.TABLE_NAME,
+                        Question.MetaData.TABLE_NAME,
+                        Question.MetaData.TABLE_NAME,
+                        Question.MetaData.QUIZ_ID,
+                        MetaData.TABLE_NAME,
+                        MetaData.QUIZ_ID
+                );
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        System.out.println(query);
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+
+                PreparedStatement ps = connection.prepareStatement(query);
+                ResultSet result = ps.executeQuery();
+
+                while (result.next()) {
+                    Quiz temp = new Quiz();
+                    temp.setQuizId(result.getInt(1));
+                    temp.setTitle(result.getString(2));
+                    int count = result.getInt(3);
+                    quizes.put(temp, count);
+
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return quizes;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

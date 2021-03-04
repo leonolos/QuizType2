@@ -20,10 +20,18 @@ public class QuizCardLayoutFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
+
+    public void setNoq(String value) {
+        this.noq.setText(value);
+    }
+
+    public void setTitle(String value) {
+        this.title.setText(value);
+    }
 
     @FXML
     private void startQuiz(ActionEvent event) {
     }
-    
+
 }
