@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
+import listeners.NewScreenListener;
 import models.Quiz;
 
 public class QuizListController implements Initializable {
@@ -18,26 +19,49 @@ public class QuizListController implements Initializable {
     private FlowPane quizListContainer;
 
     Map<Quiz, Integer> quizzes = null;
+    private NewScreenListener screenListener;
+    private Set<Quiz> keys;
+
+    public void setScreenListener(NewScreenListener screenListener) {
+        this.screenListener = screenListener;
+        setCards();
+    }
+
+    private void setCards() {
+        
+        for (Quiz quiz : keys) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().
+                    getResource("/fxml/student/QuizCardLayoutFXML.fxml"));
+            try {
+                Node node = fxmlLoader.load();
+                QuizCardLayoutFXMLController quizCardLayoutFXMLController = fxmlLoader.getController();
+                quizCardLayoutFXMLController.setTitle(quiz.getTitle());
+                quizCardLayoutFXMLController.setNoq(quizzes.get(quiz) + "");
+                quizCardLayoutFXMLController.setScreenListener(this.screenListener);
+                quizListContainer.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         quizzes = Quiz.getAllWithQuestionCount();
-        Set<Quiz> keys = quizzes.keySet();
-        for (Quiz quiz : keys) {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().
-                    getResource("/fxml/student/QuizCardLayoutFXML.fxml"));
-
-            try {
-                Node node = fxmlLoader.load();
-                QuizCardLayoutFXMLController quizCardLayoutFXMLController = fxmlLoader.getController();
-                quizCardLayoutFXMLController.setTitle(quiz.getTitle());
-                quizCardLayoutFXMLController.setNoq(quizzes.get(quiz)+"");
-                quizListContainer.getChildren().add(node);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }        
+        keys = quizzes.keySet();
+//        for (Quiz quiz : keys) {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().
+//                    getResource("/fxml/student/QuizCardLayoutFXML.fxml"));
+//
+//            try {
+//                Node node = fxmlLoader.load();
+//                QuizCardLayoutFXMLController quizCardLayoutFXMLController = fxmlLoader.getController();
+//                quizCardLayoutFXMLController.setTitle(quiz.getTitle());
+//                quizCardLayoutFXMLController.setNoq(quizzes.get(quiz) + "");
+//                quizListContainer.getChildren().add(node);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
     }
-
 }

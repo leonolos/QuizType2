@@ -75,7 +75,7 @@ public class LoginController implements Initializable {
 
         Student s = new Student(this.studentFirstName.getText(), this.studentPassword.getText());
         try {
-            s.login();
+//            s.login();
             System.out.println(s);
             
              try {

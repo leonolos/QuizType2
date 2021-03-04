@@ -1,12 +1,18 @@
 package controllers.student;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import listeners.NewScreenListener;
 
 public class QuizCardLayoutFXMLController implements Initializable {
 
@@ -16,6 +22,12 @@ public class QuizCardLayoutFXMLController implements Initializable {
     private Label noq;
     @FXML
     private Button startButton;
+    
+    private NewScreenListener screenListener;
+
+    public void setScreenListener(NewScreenListener screenListener) {
+        this.screenListener = screenListener;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -32,6 +44,17 @@ public class QuizCardLayoutFXMLController implements Initializable {
 
     @FXML
     private void startQuiz(ActionEvent event) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().
+                getResource("/fxml/student/QuestionsScreenFXML.fxml"));
+
+        try {
+            Node node = fxmlLoader.load();
+            this.screenListener.changeScreen(node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
+
+
