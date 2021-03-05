@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import models.Quiz;
 
 public class QuestionsScreenFXMLController implements Initializable {
 
@@ -32,6 +33,13 @@ public class QuestionsScreenFXMLController implements Initializable {
     private Button submit;
     @FXML
     private ToggleGroup options;
+    
+    private Quiz quiz;
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+        this.title.setText(this.quiz.getTitle());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
