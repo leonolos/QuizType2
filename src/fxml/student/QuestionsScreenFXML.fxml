@@ -92,7 +92,7 @@
                         <Separator layoutX="20.0" layoutY="91.0" prefWidth="200.0" />
                         <FlowPane prefHeight="29.0" prefWidth="217.0">
                            <children>
-                              <Button fx:id="next" mnemonicParsing="false" onAction="#nextQuestion" text="Next question">
+                              <Button fx:id="next" mnemonicParsing="false" onAction="#nextQuestions" text="Next question">
                                  <FlowPane.margin>
                                     <Insets left="15.0" right="5.0" />
                                  </FlowPane.margin>

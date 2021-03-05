@@ -233,6 +233,62 @@ public class Quiz {
         return quizes;
     }
 
+    // get questions Using Quiz (Obtenir des questions à l'aide du quiz
+    public List<Question> getQuestions() {
+        List<Question> quizes = new ArrayList<>();
+        
+//        SELECT 
+        String query = String.
+                format("SELECT "
+                        + "%s, %s,"
+                        + "%s, %s,"
+                        + "%s, %s,"
+                        + "%s "
+                        + "FROM %s where %s=?",
+                        
+                        Question.MetaData.QUESTION_ID,
+                        Question.MetaData.QUESTION,
+                        Question.MetaData.OPTION1,
+                        Question.MetaData.OPTION2,
+                        Question.MetaData.OPTION3,
+                        Question.MetaData.OPTION4,
+                        Question.MetaData.ANSWER,
+                        
+                        Question.MetaData.TABLE_NAME,
+                        Question.MetaData.QUIZ_ID
+                        
+                );
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        System.out.println(query);
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            try (Connection connection = DriverManager.getConnection(connectionUrl)) {
+
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1,this.quizId);
+                ResultSet result = ps.executeQuery();
+
+                while (result.next()) {            
+                    Question tempQuestion = new Question();
+                    tempQuestion.setQuestionId(result.getInt(1));
+                    tempQuestion.setQuestion(result.getString(2));
+                    tempQuestion.setOption1(result.getString(3));
+                    tempQuestion.setOption2(result.getString(4));
+                    tempQuestion.setOption3(result.getString(5));
+                    tempQuestion.setOption4(result.getString(6));
+                    tempQuestion.setAnswer(result.getString(7));
+                    tempQuestion.setQuiz(this);
+                    quizes.add(tempQuestion);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return quizes;
+    }
+
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
