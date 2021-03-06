@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +20,25 @@ import models.Quiz;
 import org.controlsfx.control.Notifications;
 
 public class QuestionsScreenFXMLController implements Initializable {
+
+    private class QuestionsObservable {
+
+        Property<String> question = new SimpleStringProperty();
+        Property<String> option1 = new SimpleStringProperty();
+        Property<String> option2 = new SimpleStringProperty();
+        Property<String> option3 = new SimpleStringProperty();
+        Property<String> option4 = new SimpleStringProperty();
+        Property<String> answer = new SimpleStringProperty();
+
+        public void setQuestion(Question question) {
+            this.question.setValue(question.getQuestion());
+            this.option1.setValue(question.getOption1());
+            this.option2.setValue(question.getOption2());
+            this.option3.setValue(question.getOption3());
+            this.option4.setValue(question.getOption4());
+            this.answer.setValue(question.getAnswer());
+        }      
+    }
 
     @FXML
     private Label title;
@@ -43,6 +65,7 @@ public class QuestionsScreenFXMLController implements Initializable {
     private List<Question> questionList;
     private Question currentQuestion;
     int currentIndex = 0;
+    private QuestionsObservable questionsObservable;
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
@@ -63,8 +86,19 @@ public class QuestionsScreenFXMLController implements Initializable {
         // TODO
         this.showNextQuestionButton();
         this.hideSubmitQuizButton();
+        
+        this.questionsObservable = new QuestionsObservable();
+        bindFields();
     }
 
+    private void bindFields(){
+        this.question.textProperty().bind(this.questionsObservable.question);
+        this.option4.textProperty().bind(this.questionsObservable.option4);
+        this.option3.textProperty().bind(this.questionsObservable.option3);
+        this.option2.textProperty().bind(this.questionsObservable.option2);
+        this.option1.textProperty().bind(this.questionsObservable.option1);
+        
+    }
     @FXML
     private void nextQuestions(ActionEvent event) {
         this.setNextQuestion();
@@ -73,30 +107,27 @@ public class QuestionsScreenFXMLController implements Initializable {
     private void setNextQuestion() {
         if (!(currentIndex >= questionList.size())) {
             this.currentQuestion = this.questionList.get(currentIndex);
-            
-            List<String> options=new ArrayList<>();
+            List<String> options = new ArrayList<>();
             options.add(this.currentQuestion.getOption1());
             options.add(this.currentQuestion.getOption2());
             options.add(this.currentQuestion.getOption3());
             options.add(this.currentQuestion.getOption4());
             Collections.shuffle(options);
-                    
-            this.question.setText(this.currentQuestion.getQuestion());
-            this.option1.setText(options.get(0));
-            this.option1.setText(options.get(1));
-            this.option1.setText(options.get(2));
-            this.option1.setText(options.get(3));
             
-//            this.option1.setText(this.currentQuestion.getOption1());
-//            this.option2.setText(this.currentQuestion.getOption2());
-//            this.option3.setText(this.currentQuestion.getOption3());
-//            this.option4.setText(this.currentQuestion.getOption4());
+            this.currentQuestion.setOption1(options.get(0));
+            this.currentQuestion.setOption2(options.get(1));
+            this.currentQuestion.setOption3(options.get(2));
+            this.currentQuestion.setOption4(options.get(3));
+
+//            this.question.setText(this.currentQuestion.getQuestion());
+//            this.option1.setText(options.get(0));
+//            this.option2.setText(options.get(1));
+//            this.option3.setText(options.get(2));
+//            this.option4.setText(options.get(3));
+
+            this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;
         } else {
-//            Notifications.create()
-//                    .title("Pas de question")
-//                    .text("Il n'y a plus de question")
-//                    .showInformation();
             hideNextQuestionButton();
             showSubmitQuizButton();
         }
