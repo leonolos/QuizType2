@@ -1,6 +1,8 @@
 package controllers.student;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -51,6 +53,7 @@ public class QuestionsScreenFXMLController implements Initializable {
     private void getData() {
         if (quiz != null) {
             this.questionList = quiz.getQuestions();
+            Collections.shuffle(this.questionList);
             setNextQuestion();
         }
     }
@@ -70,12 +73,24 @@ public class QuestionsScreenFXMLController implements Initializable {
     private void setNextQuestion() {
         if (!(currentIndex >= questionList.size())) {
             this.currentQuestion = this.questionList.get(currentIndex);
-
+            
+            List<String> options=new ArrayList<>();
+            options.add(this.currentQuestion.getOption1());
+            options.add(this.currentQuestion.getOption2());
+            options.add(this.currentQuestion.getOption3());
+            options.add(this.currentQuestion.getOption4());
+            Collections.shuffle(options);
+                    
             this.question.setText(this.currentQuestion.getQuestion());
-            this.option1.setText(this.currentQuestion.getOption1());
-            this.option2.setText(this.currentQuestion.getOption2());
-            this.option3.setText(this.currentQuestion.getOption3());
-            this.option4.setText(this.currentQuestion.getOption4());
+            this.option1.setText(options.get(0));
+            this.option1.setText(options.get(1));
+            this.option1.setText(options.get(2));
+            this.option1.setText(options.get(3));
+            
+//            this.option1.setText(this.currentQuestion.getOption1());
+//            this.option2.setText(this.currentQuestion.getOption2());
+//            this.option3.setText(this.currentQuestion.getOption3());
+//            this.option4.setText(this.currentQuestion.getOption4());
             currentIndex++;
         } else {
 //            Notifications.create()
