@@ -1,5 +1,6 @@
 package controllers.student;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,11 +11,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.FlowPane;
 import models.Question;
 import models.Quiz;
 import org.controlsfx.control.Notifications;
@@ -37,7 +41,7 @@ public class QuestionsScreenFXMLController implements Initializable {
             this.option3.setValue(question.getOption3());
             this.option4.setValue(question.getOption4());
             this.answer.setValue(question.getAnswer());
-        }      
+        }
     }
 
     @FXML
@@ -60,6 +64,8 @@ public class QuestionsScreenFXMLController implements Initializable {
     private Button submit;
     @FXML
     private ToggleGroup options;
+    @FXML
+    private FlowPane progressPane;
 
     private Quiz quiz;
     private List<Question> questionList;
@@ -86,19 +92,32 @@ public class QuestionsScreenFXMLController implements Initializable {
         // TODO
         this.showNextQuestionButton();
         this.hideSubmitQuizButton();
-        
+
         this.questionsObservable = new QuestionsObservable();
         bindFields();
+
+        for (int i = 0; i < 20; i++) {
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    getClass()
+                            .getResource("/fxml/student/ProgressCircleFXML.fxml"));
+            try {
+                Node node = fxmlLoader.load();
+                progressPane.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    private void bindFields(){
+    private void bindFields() {
         this.question.textProperty().bind(this.questionsObservable.question);
         this.option4.textProperty().bind(this.questionsObservable.option4);
         this.option3.textProperty().bind(this.questionsObservable.option3);
         this.option2.textProperty().bind(this.questionsObservable.option2);
         this.option1.textProperty().bind(this.questionsObservable.option1);
-        
+
     }
+
     @FXML
     private void nextQuestions(ActionEvent event) {
         this.setNextQuestion();
@@ -113,7 +132,7 @@ public class QuestionsScreenFXMLController implements Initializable {
             options.add(this.currentQuestion.getOption3());
             options.add(this.currentQuestion.getOption4());
             Collections.shuffle(options);
-            
+
             this.currentQuestion.setOption1(options.get(0));
             this.currentQuestion.setOption2(options.get(1));
             this.currentQuestion.setOption3(options.get(2));
@@ -124,7 +143,6 @@ public class QuestionsScreenFXMLController implements Initializable {
 //            this.option2.setText(options.get(1));
 //            this.option3.setText(options.get(2));
 //            this.option4.setText(options.get(3));
-
             this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;
         } else {
