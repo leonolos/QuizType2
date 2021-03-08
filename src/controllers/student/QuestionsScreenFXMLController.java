@@ -126,6 +126,24 @@ public class QuestionsScreenFXMLController implements Initializable {
 
     @FXML
     private void nextQuestions(ActionEvent event) {
+        boolean isRight = false;
+        {
+            // Checking answer
+            RadioButton selectedButton = (RadioButton) options.getSelectedToggle();
+            String userAnswer = selectedButton.getText();
+            String rightAnswer = this.currentQuestion.getAnswer();
+            if (userAnswer.trim().equalsIgnoreCase(rightAnswer.trim())) {
+                isRight = true;
+            }
+        }
+        Node circleNode = this.progressPane.getChildren().get(currentIndex-1);
+        ProgressCircleFXMLController controller = (ProgressCircleFXMLController) circleNode.getUserData();
+        
+        if (isRight) {
+            controller.setRightAnsweredColor();
+        } else {
+            controller.setWrongAnsweredColor();
+        }
         this.setNextQuestion();
     }
 
