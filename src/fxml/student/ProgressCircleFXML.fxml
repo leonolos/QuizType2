@@ -5,9 +5,14 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="40.0" prefWidth="40.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllers.student.ProgressCircleFXMLController">
-   <children>
+<AnchorPane id="AnchorPane" prefHeight="40.0" prefWidth="40.0" 
+            xmlns="http://javafx.com/javafx/11.0.1" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controllers.student.ProgressCircleFXMLController">
+  <userData>
+      <fx:reference source="controller"></fx:reference>
+  </userData>
+    <children>
       <Circle fx:id="circle" fill="DODGERBLUE" layoutX="20.0" layoutY="20.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Label fx:id="number" layoutX="4.0" prefHeight="40.0" prefWidth="33.0" text="25">
          <font>

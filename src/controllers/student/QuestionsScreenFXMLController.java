@@ -24,16 +24,16 @@ import models.Quiz;
 import org.controlsfx.control.Notifications;
 
 public class QuestionsScreenFXMLController implements Initializable {
-    
+
     private class QuestionsObservable {
-        
+
         Property<String> question = new SimpleStringProperty();
         Property<String> option1 = new SimpleStringProperty();
         Property<String> option2 = new SimpleStringProperty();
         Property<String> option3 = new SimpleStringProperty();
         Property<String> option4 = new SimpleStringProperty();
         Property<String> answer = new SimpleStringProperty();
-        
+
         public void setQuestion(Question question) {
             this.question.setValue(question.getQuestion());
             this.option1.setValue(question.getOption1());
@@ -43,7 +43,7 @@ public class QuestionsScreenFXMLController implements Initializable {
             this.answer.setValue(question.getAnswer());
         }
     }
-    
+
     @FXML
     private Label title;
     @FXML
@@ -66,28 +66,28 @@ public class QuestionsScreenFXMLController implements Initializable {
     private ToggleGroup options;
     @FXML
     private FlowPane progressPane;
-    
+
     private Quiz quiz;
     private List<Question> questionList;
     private Question currentQuestion;
     int currentIndex = 0;
     private QuestionsObservable questionsObservable;
-    
+
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
         this.title.setText(this.quiz.getTitle());
         this.getData();
     }
-    
+
     private void getData() {
         if (quiz != null) {
             this.questionList = quiz.getQuestions();
             Collections.shuffle(this.questionList);
-            setNextQuestion();
             renderProgress();
+            setNextQuestion();
         }
     }
-    
+
     private void renderProgress() {
         for (int i = 0; i < this.questionList.size(); i++) {
             FXMLLoader fxmlLoader = new FXMLLoader(
@@ -97,51 +97,48 @@ public class QuestionsScreenFXMLController implements Initializable {
                 Node node = fxmlLoader.load();
                 ProgressCircleFXMLController progressCircleFXMLController = fxmlLoader.getController();
                 progressCircleFXMLController.setNumber(i + 1);
+                progressCircleFXMLController.setDefaultColor();
                 progressPane.getChildren().add(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         this.showNextQuestionButton();
         this.hideSubmitQuizButton();
-        
+
         this.questionsObservable = new QuestionsObservable();
         bindFields();
-
-//        for (int i = 0; i < 20; i++) {
-//            FXMLLoader fxmlLoader = new FXMLLoader(
-//                    getClass()
-//                            .getResource("/fxml/student/ProgressCircleFXML.fxml"));
-//            try {
-//                Node node = fxmlLoader.load();
-//                progressPane.getChildren().add(node);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
-    
+
     private void bindFields() {
         this.question.textProperty().bind(this.questionsObservable.question);
         this.option4.textProperty().bind(this.questionsObservable.option4);
         this.option3.textProperty().bind(this.questionsObservable.option3);
         this.option2.textProperty().bind(this.questionsObservable.option2);
         this.option1.textProperty().bind(this.questionsObservable.option1);
-        
+
     }
-    
+
     @FXML
     private void nextQuestions(ActionEvent event) {
         this.setNextQuestion();
     }
-    
+
     private void setNextQuestion() {
         if (!(currentIndex >= questionList.size())) {
+
+            {
+                //Changing the color
+                Node circleNode = this.progressPane.getChildren().get(currentIndex);
+                ProgressCircleFXMLController controller = (ProgressCircleFXMLController) circleNode.getUserData();
+                controller.setCurrentQuestionColor();
+            }
+
             this.currentQuestion = this.questionList.get(currentIndex);
             List<String> options = new ArrayList<>();
             options.add(this.currentQuestion.getOption1());
@@ -149,7 +146,7 @@ public class QuestionsScreenFXMLController implements Initializable {
             options.add(this.currentQuestion.getOption3());
             options.add(this.currentQuestion.getOption4());
             Collections.shuffle(options);
-            
+
             this.currentQuestion.setOption1(options.get(0));
             this.currentQuestion.setOption2(options.get(1));
             this.currentQuestion.setOption3(options.get(2));
@@ -167,25 +164,25 @@ public class QuestionsScreenFXMLController implements Initializable {
             showSubmitQuizButton();
         }
     }
-    
+
     private void hideNextQuestionButton() {
         this.next.setVisible(false);
     }
-    
+
     private void showNextQuestionButton() {
         this.next.setVisible(true);
     }
-    
+
     private void hideSubmitQuizButton() {
         this.submit.setVisible(false);
     }
-    
+
     private void showSubmitQuizButton() {
         this.submit.setVisible(true);
     }
-    
+
     @FXML
     private void submit(ActionEvent event) {
     }
-    
+
 }
