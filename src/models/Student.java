@@ -146,7 +146,7 @@ public class Student {
         );
         System.out.println(query);
         try {
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
             Class.forName("org.sqlite.JDBC");
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
@@ -170,7 +170,7 @@ public class Student {
                 MetaData.EMAIL,
                 MetaData.PASSWORD,
                 MetaData.GENDER);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         try {
             Class.forName("org.sqlite.JDBC");
             try (Connection connection = DriverManager.getConnection(connectionUrl)) {
@@ -215,7 +215,7 @@ public class Student {
                 MetaData.PASSWORD,
                 MetaData.GENDER,
                 MetaData.TABLE_NAME);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         try {
             Class.forName("org.sqlite.JDBC");
             try (Connection connection = DriverManager.getConnection(connectionUrl)) {
@@ -247,7 +247,7 @@ public class Student {
                 MetaData.TABLE_NAME,
                 MetaData.FIRST_NAME); //On remplacera par MetaData.EMAIL
 
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         try {
             Class.forName("org.sqlite.JDBC");
             try (Connection connection = DriverManager.getConnection(connectionUrl)) {
@@ -281,7 +281,7 @@ public class Student {
                 MetaData.PASSWORD);
 
         System.out.println(query);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         Class.forName("org.sqlite.JDBC");
         try (Connection connection = DriverManager.getConnection(connectionUrl)) {
 

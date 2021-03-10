@@ -23,6 +23,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import models.Question;
 import models.Quiz;
+import models.QuizResult;
+import models.Student;
 import org.controlsfx.control.Notifications;
 
 public class QuestionsScreenFXMLController implements Initializable {
@@ -75,7 +77,8 @@ public class QuestionsScreenFXMLController implements Initializable {
     private Question currentQuestion;
     int currentIndex = 0;
     private QuestionsObservable questionsObservable;
-    private Map<Question , String> studentAnswers = new HashMap<>();
+    private Map<Question, String> studentAnswers = new HashMap<>();
+    private Integer numberOfRightAnswers = 0;
 
     //METHODS AND CONSTRUCTOR
     public void setQuiz(Quiz quiz) {
@@ -118,7 +121,7 @@ public class QuestionsScreenFXMLController implements Initializable {
 
         this.questionsObservable = new QuestionsObservable();
         bindFields();
-        
+
         this.option1.setSelected(true);
     }
 
@@ -141,14 +144,15 @@ public class QuestionsScreenFXMLController implements Initializable {
             String rightAnswer = this.currentQuestion.getAnswer();
             if (userAnswer.trim().equalsIgnoreCase(rightAnswer.trim())) {
                 isRight = true;
+                this.numberOfRightAnswers++;
             }
-            
+
             //saving Answer to hashMap
             studentAnswers.put(this.currentQuestion, userAnswer);
         }
-        Node circleNode = this.progressPane.getChildren().get(currentIndex-1);
+        Node circleNode = this.progressPane.getChildren().get(currentIndex - 1);
         ProgressCircleFXMLController controller = (ProgressCircleFXMLController) circleNode.getUserData();
-        
+
         if (isRight) {
             controller.setRightAnsweredColor();
         } else {
@@ -212,6 +216,10 @@ public class QuestionsScreenFXMLController implements Initializable {
     @FXML
     private void submit(ActionEvent event) {
         System.out.println(this.studentAnswers);
+        Student student = new Student();
+        student.setId(1);
+        QuizResult quizResult = new QuizResult(this.quiz, student, numberOfRightAnswers);
+        quizResult.save(this.studentAnswers);
     }
 
 }

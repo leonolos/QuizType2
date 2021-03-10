@@ -142,7 +142,7 @@ public class Question {
         System.err.println(query);
 
         try {
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
             Class.forName("org.sqlite.JDBC");
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
@@ -164,7 +164,7 @@ public class Question {
                 MetaData.OPTION3, MetaData.OPTION4, MetaData.ANSWER,
                 MetaData.QUIZ_ID);
         System.err.println("Actual Query= " + query);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
 
         try {
             Class.forName("org.sqlite.JDBC");

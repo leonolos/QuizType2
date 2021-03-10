@@ -63,7 +63,7 @@ public class Quiz {
             String query = String.format(raw, MetaData.TABLE_NAME, MetaData.QUIZ_ID, MetaData.TITLE);
             System.err.println(query);
 
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
             Class.forName("org.sqlite.JDBC");
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
@@ -80,7 +80,7 @@ public class Quiz {
     public int save() {
         String raw = "Insert into %s (%s) values (?)";
         String query = String.format(raw, MetaData.TABLE_NAME, MetaData.TITLE);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -143,7 +143,7 @@ public class Quiz {
                         MetaData.TABLE_NAME,
                         MetaData.QUIZ_ID
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         System.out.println(query);
 
         try {
@@ -209,7 +209,7 @@ public class Quiz {
                         MetaData.TABLE_NAME,
                         MetaData.QUIZ_ID
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         System.out.println(query);
 
         try {
@@ -260,7 +260,7 @@ public class Quiz {
                         Question.MetaData.QUIZ_ID
                         
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         System.out.println(query);
 
         try {

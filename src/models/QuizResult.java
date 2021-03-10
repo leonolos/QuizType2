@@ -1,10 +1,15 @@
 package models;
 
+import constants.DatabaseConstants;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Map;
 
 public class QuizResult {
 
@@ -15,6 +20,7 @@ public class QuizResult {
     private Timestamp timestamp;
 
     public static class MetaData {
+
         public static final String TABLE_NAME = "QUIZ_RESULTS";
         public static final String ID = "id";
         public static final String QUIZ_ID = "QUIZ_ID";
@@ -86,7 +92,7 @@ public class QuizResult {
     public static void createTable() {
 
         String raw = "CREATE table %s (\n"
-                + "%s int not null PRIMARY key ,\n"
+                + "%s Integer not null PRIMARY key AUTOINCREMENT,\n"
                 + "%s int not null ,\n"
                 + "%s int not null ,\n"
                 + "%s int not null ,\n"
@@ -109,12 +115,12 @@ public class QuizResult {
                 Student.MetaData.TABLE_NAME,
                 Student.MetaData.ID
         );
-
         System.err.println(query);
-
         try {
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
-            Class.forName("org.sqlite.JDBC");
+//            String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
+//            Class.forName("org.sqlite.JDBC");
+            String connectionUrl = DatabaseConstants.CONNECTION_URL;
+            Class.forName(DatabaseConstants.DRIVER_CLASS);
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
             PreparedStatement ps = connection.prepareStatement(query);
@@ -124,6 +130,46 @@ public class QuizResult {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void save(Map<Question, String> userAnswers) {
+        String raw = "INSERT INTO %s (%s, %s, %s, %s) values \n"
+                + "(?, ?, ?, CURRENT_TIMESTAMP)";
+        String query = String.format(raw,
+                MetaData.TABLE_NAME,
+                MetaData.STUDENT_ID,
+                MetaData.QUIZ_ID,
+                MetaData.RIGHT_ANSWERS,
+                MetaData.TIMESTAMP
+        );
+        System.err.println(query);
+        try {
+            String connectionUrl = DatabaseConstants.CONNECTION_URL;
+            Class.forName(DatabaseConstants.DRIVER_CLASS);
+            Connection connection;
+            connection = DriverManager.getConnection(connectionUrl);
+            PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, this.getStudent().getId());
+            ps.setInt(2, this.getQuiz().getQuizId());
+            ps.setInt(3, this.getRightAnswers());
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                ResultSet keys = ps.getGeneratedKeys();
+                if (keys.next()) {
+                    this.setId(keys.getInt(1));
+                    
+                    //Now we will save details    
+                    System.out.println(this);
+//                    saveQuizResultDetails(userAnswers);
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    private void saveQuizResultDetails(Map<Question , String> userAnswers){
+    
     }
 
 }
