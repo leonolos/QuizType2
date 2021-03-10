@@ -148,6 +148,7 @@ public class AdminStudentTabController implements Initializable {
             Notifications.create()
                     .title("S'il vous plaît, remplir correctement le formulaire")
                     .text(message)
+                    .position(Pos.CENTER)
                     .showWarning();
             return;
         }
@@ -158,6 +159,7 @@ public class AdminStudentTabController implements Initializable {
             Notifications.create()
                     .title("Enregistrement échoué")
                     .text("Cet étudiant existe déjà!")
+                    .position(Pos.CENTER)
                     .showError();
             return;
         }
@@ -167,7 +169,7 @@ public class AdminStudentTabController implements Initializable {
             Notifications.create()
                     .text("Etudiant inscrit...")
                     .title("Succès")
-                    .position(Pos.TOP_RIGHT)
+                    .position(Pos.CENTER)
                     .showInformation();
             this.resetForm();
             
@@ -176,7 +178,7 @@ public class AdminStudentTabController implements Initializable {
             Notifications.create()
                     .text("Inscription échoué...")
                     .title("Echoué")
-                    .position(Pos.TOP_RIGHT)
+                    .position(Pos.CENTER)
                     .showError();
         }
 

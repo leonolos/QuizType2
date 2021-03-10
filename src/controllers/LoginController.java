@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -93,6 +94,7 @@ public class LoginController implements Initializable {
                 Notifications.create()
                         .title("Login Failed...")
                         .text("Prénom ou mot de passe incorrecte")
+                        .position(Pos.CENTER)
                         .showError();
             }
         }
