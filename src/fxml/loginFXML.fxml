@@ -23,7 +23,7 @@
       </ImageView>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-          <Tab text="Student">
+          <Tab text="Visiteur">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -37,7 +37,7 @@
                                     <Insets bottom="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label alignment="CENTER" layoutX="117.0" layoutY="244.0" opacity="0.7" prefWidth="122.0" style="-fx-background-color: white;" text="First Name" textFill="GREEN">
+                              <Label alignment="CENTER" layoutX="117.0" layoutY="244.0" opacity="0.7" prefWidth="122.0" style="-fx-background-color: white;" text="Prénom" textFill="GREEN">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
@@ -78,7 +78,7 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Admin">
+          <Tab text="Administrateur">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

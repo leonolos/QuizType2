@@ -110,7 +110,7 @@ public class AddQuizFXMLController implements Initializable {
                     .darkStyle()
                     .position(Pos.CENTER)
                     .title("Titre du Quiz")
-                    .text("Ecrire le titre du Quiz s'il vous plaît")
+                    .text("Saisir le titre du Quiz s'il vous plaît")
                     .hideAfter(Duration.millis(3000))
                     .showError();
 //            System.out.println("Ecrire un titre");
@@ -126,7 +126,7 @@ public class AddQuizFXMLController implements Initializable {
             Notifications.create()
                     .darkStyle()
                     .title("Quiz")
-                    .text("Entrez le titre de la Quiz s'il vous plaît")
+                    .text("Saisir puis enregistrer le titre du Quiz SVP")
                     .position(Pos.CENTER)
                     .hideAfter(Duration.millis(3000))
                     .showError();
@@ -228,8 +228,8 @@ public class AddQuizFXMLController implements Initializable {
                 //success
                 Notifications.create()
                         .darkStyle()
-                        .title("Success")
-                        .text("Quiz Successfully Saved...")
+                        .title("Succès")
+                        .text("Quiz enregistré")
                         .position(Pos.CENTER)
                         .hideAfter(Duration.millis(3000))
                         .showInformation();
@@ -237,8 +237,8 @@ public class AddQuizFXMLController implements Initializable {
                 //error
                 Notifications.create()
                         .darkStyle()
-                        .title("Fail...")
-                        .text("Cant Save Quiz... Try Again...")
+                        .title("Echouer")
+                        .text("Quiz pas enregistré... Réessayer...")
                         .position(Pos.CENTER)
                         .hideAfter(Duration.millis(3000))
                         .showError();

@@ -92,12 +92,12 @@
                         <Separator layoutX="20.0" layoutY="91.0" prefWidth="200.0" />
                         <FlowPane prefHeight="29.0" prefWidth="217.0">
                            <children>
-                              <Button fx:id="next" mnemonicParsing="false" onAction="#nextQuestions" text="Next question">
+                              <Button fx:id="next" mnemonicParsing="false" onAction="#nextQuestions" text="Question suivant">
                                  <FlowPane.margin>
                                     <Insets left="15.0" right="5.0" />
                                  </FlowPane.margin>
                               </Button>
-                              <Button fx:id="submit" mnemonicParsing="false" onAction="#submit" text="Submit quiz" />
+                              <Button fx:id="submit" mnemonicParsing="false" onAction="#submit" text="ENREGISTRER" />
                            </children>
                         </FlowPane>
                      </children>

@@ -18,22 +18,22 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="333.0">
                <children>
-                  <Label layoutX="101.0" layoutY="4.0" prefHeight="20.0" prefWidth="132.0" text="Enter Student Details">
+                  <Label layoutX="93.0" layoutY="4.0" prefHeight="20.0" prefWidth="148.0" text="Information du visiteur">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="firstName" layoutX="13.0" layoutY="24.0" prefHeight="17.0" prefWidth="307.0" promptText="First Name">
+                  <TextField fx:id="firstName" layoutX="13.0" layoutY="24.0" prefHeight="17.0" prefWidth="307.0" promptText="Prénom">
                      <padding>
                         <Insets left="15.0" />
                      </padding>
                   </TextField>
-                  <TextField fx:id="lastName" layoutX="13.0" layoutY="48.0" prefHeight="17.0" prefWidth="307.0" promptText="Second Name">
+                  <TextField fx:id="lastName" layoutX="13.0" layoutY="48.0" prefHeight="17.0" prefWidth="307.0" promptText="Nom">
                      <padding>
                         <Insets left="15.0" />
                      </padding>
                   </TextField>
-                  <TextField fx:id="mobilNumber" layoutX="13.0" layoutY="140.0" prefHeight="17.0" prefWidth="307.0" promptText="Mobil Number">
+                  <TextField fx:id="mobilNumber" layoutX="13.0" layoutY="132.0" prefHeight="25.0" prefWidth="307.0" promptText="Numéro de téléphone">
                      <padding>
                         <Insets left="15.0" />
                      </padding>
@@ -43,24 +43,24 @@
                         <Insets left="15.0" />
                      </padding>
                   </TextField>
-                  <PasswordField fx:id="password" layoutX="14.0" layoutY="104.0" prefHeight="25.0" prefWidth="307.0" promptText="Password" />
-                  <Label layoutX="14.0" layoutY="157.0" text="Gender :" />
-                  <RadioButton fx:id="male" layoutX="77.0" layoutY="157.0" mnemonicParsing="false" text="Male" />
-                  <RadioButton fx:id="female" layoutX="140.0" layoutY="157.0" mnemonicParsing="false" text="Female" />
-                  <Button fx:id="saveButton" layoutX="227.0" layoutY="174.0" mnemonicParsing="false" onAction="#saveStudent" prefHeight="25.0" prefWidth="92.0" text="Save Student" />
+                  <PasswordField fx:id="password" layoutX="14.0" layoutY="104.0" prefHeight="25.0" prefWidth="307.0" promptText="Mot de passe" />
+                  <Label layoutX="14.0" layoutY="157.0" text="Genre:" />
+                  <RadioButton fx:id="male" layoutX="82.0" layoutY="157.0" mnemonicParsing="false" text="Masculin" />
+                  <RadioButton fx:id="female" layoutX="82.0" layoutY="178.0" mnemonicParsing="false" text="Féminin" />
+                  <Button fx:id="saveButton" layoutX="227.0" layoutY="174.0" mnemonicParsing="false" onAction="#saveStudent" prefHeight="25.0" prefWidth="92.0" text="Enregistrer" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="397.0" prefWidth="333.0">
                <children>
                   <TableView fx:id="studentTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="studentIdColumn" prefWidth="40.0" text="Student id" />
-                      <TableColumn fx:id="firstNameColumn" prefWidth="43.0" text="First Name" />
-                        <TableColumn fx:id="lastNameColumn" prefWidth="36.0" text="Last Name" />
-                        <TableColumn fx:id="mobilNumberColumn" prefWidth="52.0" text="Mobil Number" />
+                      <TableColumn fx:id="studentIdColumn" prefWidth="40.0" text="id Visiteur" />
+                      <TableColumn fx:id="firstNameColumn" prefWidth="43.0" text="Prénom" />
+                        <TableColumn fx:id="lastNameColumn" prefWidth="36.0" text="Nom" />
+                        <TableColumn fx:id="mobilNumberColumn" prefWidth="52.0" text="N° Tél" />
                         <TableColumn fx:id="emailColumn" prefWidth="52.0" text="Email" />
-                        <TableColumn fx:id="passwordColumn" prefWidth="52.0" text="Password" />
-                        <TableColumn fx:id="genderColumn" prefWidth="48.0" text="Gender" />
+                        <TableColumn fx:id="passwordColumn" prefWidth="52.0" text="Mot de passe" />
+                        <TableColumn fx:id="genderColumn" prefWidth="48.0" text="Genre" />
                     </columns>
                   </TableView>
                </children>
