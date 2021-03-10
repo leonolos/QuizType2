@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
@@ -67,12 +69,15 @@ public class QuestionsScreenFXMLController implements Initializable {
     @FXML
     private FlowPane progressPane;
 
+    //NO FXML Fields
     private Quiz quiz;
     private List<Question> questionList;
     private Question currentQuestion;
     int currentIndex = 0;
     private QuestionsObservable questionsObservable;
+    private Map<Question , String> studentAnswers = new HashMap<>();
 
+    //METHODS AND CONSTRUCTOR
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
         this.title.setText(this.quiz.getTitle());
@@ -113,6 +118,8 @@ public class QuestionsScreenFXMLController implements Initializable {
 
         this.questionsObservable = new QuestionsObservable();
         bindFields();
+        
+        this.option1.setSelected(true);
     }
 
     private void bindFields() {
@@ -135,6 +142,9 @@ public class QuestionsScreenFXMLController implements Initializable {
             if (userAnswer.trim().equalsIgnoreCase(rightAnswer.trim())) {
                 isRight = true;
             }
+            
+            //saving Answer to hashMap
+            studentAnswers.put(this.currentQuestion, userAnswer);
         }
         Node circleNode = this.progressPane.getChildren().get(currentIndex-1);
         ProgressCircleFXMLController controller = (ProgressCircleFXMLController) circleNode.getUserData();
@@ -201,6 +211,7 @@ public class QuestionsScreenFXMLController implements Initializable {
 
     @FXML
     private void submit(ActionEvent event) {
+        System.out.println(this.studentAnswers);
     }
 
 }

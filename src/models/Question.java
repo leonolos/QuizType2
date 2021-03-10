@@ -19,9 +19,9 @@ public class Question {
 
     public static class MetaData {
 
-        public static final String TABLE_NAME = "questions";
+        public static final String TABLE_NAME = "QUESTIONS";
         public static final String QUESTION = "question";
-        public static final String QUESTION_ID = "id";
+        public static final String QUESTION_ID = "ID";
         public static final String OPTION1 = "option1";
         public static final String OPTION2 = "option2";
         public static final String OPTION3 = "option3";
@@ -122,12 +122,13 @@ public class Question {
                 + "%s TEXT ,"
                 + "%s TEXT ,"
                 + "%s TEXT ,"
-                + "%s Text ,"
+                + "%s TEXT ,"
                 + "%s INTEGER ,"
                 + "FOREIGN KEY (%s) REFERENCES %s(%s))";
 
-        String query = String.format(raw, MetaData.QUESTION_ID,
+        String query = String.format(raw, 
                 MetaData.TABLE_NAME,
+                MetaData.QUESTION_ID,                
                 MetaData.OPTION1,
                 MetaData.OPTION2,
                 MetaData.OPTION3,
@@ -141,7 +142,7 @@ public class Question {
         System.err.println(query);
 
         try {
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
             Class.forName("org.sqlite.JDBC");
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
@@ -150,7 +151,7 @@ public class Question {
             System.out.println("models.quiz.createTable()");
             System.out.println(b);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -163,7 +164,7 @@ public class Question {
                 MetaData.OPTION3, MetaData.OPTION4, MetaData.ANSWER,
                 MetaData.QUIZ_ID);
         System.err.println("Actual Query= " + query);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
 
         try {
             Class.forName("org.sqlite.JDBC");

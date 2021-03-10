@@ -19,9 +19,9 @@ public class Quiz {
 
     public static class MetaData {
 
-        public static final String TABLE_NAME = "quizs";
+        public static final String TABLE_NAME = "QUIZZES";
         public static final String QUIZ_ID = "quiz_id";
-        public static final String TITLE = "title";
+        public static final String TITLE = "TITLE";
     }
 
     //Constructors
@@ -63,7 +63,7 @@ public class Quiz {
             String query = String.format(raw, MetaData.TABLE_NAME, MetaData.QUIZ_ID, MetaData.TITLE);
             System.err.println(query);
 
-            String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
             Class.forName("org.sqlite.JDBC");
             Connection connection;
             connection = DriverManager.getConnection(connectionUrl);
@@ -80,7 +80,7 @@ public class Quiz {
     public int save() {
         String raw = "Insert into %s (%s) values (?)";
         String query = String.format(raw, MetaData.TABLE_NAME, MetaData.TITLE);
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -143,7 +143,7 @@ public class Quiz {
                         MetaData.TABLE_NAME,
                         MetaData.QUIZ_ID
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
         System.out.println(query);
 
         try {
@@ -193,10 +193,10 @@ public class Quiz {
         //FROM quizs join questions on questions.quiz_id=quizs.quiz_id 
         //GROUP BY quizs.quiz_id
         String query = String.
-                format("SELECT %s.%s, %s,"
+                format("SELECT %s.%s , %s ,"
                         + " COUNT(*) as question_count"
                         + " FROM %s join %s on %s.%s=%s.%s"
-                        + " GROUP BY quizs.quiz_id",
+                        + " GROUP BY %s.%s",
                         MetaData.TABLE_NAME,
                         MetaData.QUIZ_ID,
                         MetaData.TITLE,
@@ -205,9 +205,11 @@ public class Quiz {
                         Question.MetaData.TABLE_NAME,
                         Question.MetaData.QUIZ_ID,
                         MetaData.TABLE_NAME,
+                        MetaData.QUIZ_ID,
+                        MetaData.TABLE_NAME,
                         MetaData.QUIZ_ID
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
         System.out.println(query);
 
         try {
@@ -258,7 +260,7 @@ public class Quiz {
                         Question.MetaData.QUIZ_ID
                         
                 );
-        String connectionUrl = "jdbc:sqlite:src/models/dbKiz2.db";
+        String connectionUrl = "jdbc:sqlite:src/models/dbKiz123.db";
         System.out.println(query);
 
         try {

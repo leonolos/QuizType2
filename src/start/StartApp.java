@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Question;
 import models.Quiz;
+import models.QuizResult;
+import models.QuizResultDetails;
 import models.Student;
 
 /**
@@ -30,13 +32,14 @@ public class StartApp extends Application {
         stage.setScene(scene);
         stage.show();
 
-        Quiz.createTable();
     }
 
     private void createTables() {
         Quiz.createTable();
         Question.createTable();
         Student.createTable();
+        QuizResult.createTable();
+        QuizResultDetails.createTable();
     }
 
     public static void main(String[] args) {
