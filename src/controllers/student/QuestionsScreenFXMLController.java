@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -219,7 +220,20 @@ public class QuestionsScreenFXMLController implements Initializable {
         Student student = new Student();
         student.setId(1);
         QuizResult quizResult = new QuizResult(this.quiz, student, numberOfRightAnswers);
-        quizResult.save(this.studentAnswers);
+        boolean result = quizResult.save(this.studentAnswers);
+        if (result) {
+           Notifications.create()
+                   . title("Message")
+                    .text("Vous avez réussi le quiz...")
+                    .position(Pos.CENTER)
+                    .showInformation();
+        } else {
+            Notifications.create()
+                    .title("Erreur")
+                    .text("Quelque chose s'est mal passé...")
+                    .position(Pos.CENTER)
+                    .showError();
+        }
     }
 
 }

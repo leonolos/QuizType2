@@ -3,6 +3,8 @@ package models;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Map;
+import java.util.Set;
 
 public class QuizResultDetails {
 
@@ -12,6 +14,7 @@ public class QuizResultDetails {
     private QuizResult quizResult;
 
     public static class MetaData {
+
         public static final String TABLE_NAME = "QUIZ_RESULT_DETAILS";
         public static final String ID = "ID";
         public static final String USER_ANSWER = "USER_ANSWER";
@@ -70,10 +73,10 @@ public class QuizResultDetails {
     public static void createTable() {
 
         String raw = "CREATE table %s (\n"
-                + "%s int not null PRIMARY key ,\n"
+                + "%s INTEGER NOT null PRIMARY key AUTOINCREMENT,\n"
                 + "%s int not null ,\n"
                 + "%s int not null ,\n"
-                + "%s TEXT not null ,\n"                
+                + "%s TEXT not null ,\n"
                 + "FOREIGN KEY (%s) REFERENCES %s(%s) ,\n"
                 + "FOREIGN KEY (%s) REFERENCES %s(%s) \n"
                 + ")";
@@ -89,7 +92,7 @@ public class QuizResultDetails {
                 QuizResult.MetaData.ID,
                 MetaData.QUESTION_ID,
                 Question.MetaData.TABLE_NAME,
-                Question.MetaData.QUESTION_ID                
+                Question.MetaData.QUESTION_ID
         );
 
         System.err.println(query);
@@ -105,10 +108,46 @@ public class QuizResultDetails {
             System.out.println(b);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-        }    
+        }
     }
-    
-//    public void saveQuizResultDetails(){
-//    
-//    }
+
+    public static boolean saveQuizResultDetails(QuizResult quizResult, Map<Question, String> userAnswers) {
+        String raw = "INSERT INTO QUIZ_RESULT_DETAILS (QUIZ_RESULT_ID, QUESTION_ID, USER_ANSWER) VALUES"
+                + "(? , ? , ?) ";
+        String query = String.format(raw,
+                MetaData.TABLE_NAME,
+                MetaData.QUIZ_RESULT_ID,
+                MetaData.QUESTION_ID,
+                MetaData.USER_ANSWER
+        );
+
+        System.err.println(query);
+
+        try {
+            String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
+            Class.forName("org.sqlite.JDBC");
+            Connection connection;
+            connection = DriverManager.getConnection(connectionUrl);
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            Set<Question> questions = userAnswers.keySet();
+            for (Question question : questions) {
+                ps.setInt(1, quizResult.getId());
+                ps.setInt(2, question.getQuestionId());
+                ps.setString(3, userAnswers.get(question));
+//                ps.executeUpdate();
+                ps.addBatch();
+            }
+
+            int[] result = ps.executeBatch();
+            if (result.length > 0) {
+                return true;
+            }
+            
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+        return false;
+    }
 }

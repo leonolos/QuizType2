@@ -132,7 +132,7 @@ public class QuizResult {
         }
     }
 
-    public void save(Map<Question, String> userAnswers) {
+    public boolean save(Map<Question, String> userAnswers) {
         String raw = "INSERT INTO %s (%s, %s, %s, %s) values \n"
                 + "(?, ?, ?, CURRENT_TIMESTAMP)";
         String query = String.format(raw,
@@ -157,19 +157,21 @@ public class QuizResult {
                 ResultSet keys = ps.getGeneratedKeys();
                 if (keys.next()) {
                     this.setId(keys.getInt(1));
-                    
+
                     //Now we will save details    
                     System.out.println(this);
-//                    saveQuizResultDetails(userAnswers);
+                    return saveQuizResultDetails(userAnswers);
                 }
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+            return false;
         }
+        return false;
     }
-    
-    private void saveQuizResultDetails(Map<Question , String> userAnswers){
-    
+
+    private boolean saveQuizResultDetails(Map<Question, String> userAnswers) {
+        return QuizResultDetails.saveQuizResultDetails(this, userAnswers);
     }
 
 }
