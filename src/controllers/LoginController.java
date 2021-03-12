@@ -1,6 +1,7 @@
 package controllers;
 
 import constants.AdminEmailPassword;
+import controllers.student.StudentMainScreenController;
 import exceptions.LoginException;
 import java.io.IOException;
 import java.net.URL;
@@ -80,8 +81,13 @@ public class LoginController implements Initializable {
             System.out.println(s);
 
             try {
-                Parent root = FXMLLoader.load(getClass().
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().
                         getResource("/fxml/student/StudentMainScreen.fxml"));
+                Parent root = fxmlLoader.load();
+//                Parent root = FXMLLoader.load(getClass().
+//                        getResource("/fxml/student/StudentMainScreen.fxml"));
+                StudentMainScreenController controller = fxmlLoader.getController();
+                controller.setStudent(s);
                 Stage stage = (Stage) studentPassword.getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);

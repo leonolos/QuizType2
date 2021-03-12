@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import listeners.NewScreenListener;
 import models.Quiz;
+import models.Student;
 
 public class QuizCardLayoutFXMLController implements Initializable {
 
@@ -25,8 +26,14 @@ public class QuizCardLayoutFXMLController implements Initializable {
     private Button startButton;
 
     private Quiz quiz;
+    
 
     private NewScreenListener screenListener;
+    private Student student;
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
@@ -54,6 +61,7 @@ public class QuizCardLayoutFXMLController implements Initializable {
         try {
             Node node = fxmlLoader.load();
             QuestionsScreenFXMLController questionsScreenFXMLController = fxmlLoader.getController();
+            questionsScreenFXMLController.setStudent(this.student);
             questionsScreenFXMLController.setQuiz(this.quiz);
             this.screenListener.changeScreen(node);
         } catch (IOException e) {

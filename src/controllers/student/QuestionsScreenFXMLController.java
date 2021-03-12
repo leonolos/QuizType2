@@ -83,6 +83,11 @@ public class QuestionsScreenFXMLController implements Initializable {
     private QuestionsObservable questionsObservable;
     private Map<Question, String> studentAnswers = new HashMap<>();
     private Integer numberOfRightAnswers = 0;
+    private Student student;
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }   
 
     //timer fields
     private long min, sec, hr, totalSec = 0;
@@ -106,7 +111,6 @@ public class QuestionsScreenFXMLController implements Initializable {
         sec = totalSec - (min * 60);
         hr = TimeUnit.MINUTES.toHours(min);
         min = min - (hr * 60);
-//        System.out.println(format(hr) + ":" + format(min) + ":" + format(sec));
         time.setText(format(hr) + ":" + format(min) + ":" + format(sec));
 
         totalSec--;
@@ -124,9 +128,10 @@ public class QuestionsScreenFXMLController implements Initializable {
                         System.out.println("After 1 sec...");
                         convertTime();
                         if (totalSec <= -1) {
-//                    System.exit(0);
                             timer.cancel();
                             time.setText("00:00:00");
+                            //saving data to database
+                            submit(null);
                             Notifications.create()
                                     .title("Erreur")
                                     .text("Temps écoulé...")
@@ -137,7 +142,6 @@ public class QuestionsScreenFXMLController implements Initializable {
                 });
             }
         };
-//        Timer timer = new Timer();
         timer.schedule(timerTask, 0, 1000);
     }
 
@@ -265,9 +269,12 @@ public class QuestionsScreenFXMLController implements Initializable {
 
     @FXML
     private void submit(ActionEvent event) {
+        
+        
         System.out.println(this.studentAnswers);
-        Student student = new Student();
-        student.setId(1);
+        System.out.println(this.student);
+//        Student student = new Student();
+//        student.setId(1);
         QuizResult quizResult = new QuizResult(this.quiz, student, numberOfRightAnswers);
         boolean result = quizResult.save(this.studentAnswers);
         if (result) {

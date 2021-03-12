@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import listeners.NewScreenListener;
 import models.Quiz;
+import models.Student;
 
 public class QuizListController implements Initializable {
 
@@ -22,13 +23,21 @@ public class QuizListController implements Initializable {
     private NewScreenListener screenListener;
     private Set<Quiz> keys;
 
-    public void setScreenListener(NewScreenListener screenListener) {
-        this.screenListener = screenListener;
-        setCards();
+    private Student student;
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    private void setCards() {
-        
+    public void setScreenListener(NewScreenListener screenListener) {
+        this.screenListener = screenListener;
+//        setCards();
+    }
+    
+    
+
+    public void setCards() {
+
         for (Quiz quiz : keys) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().
                     getResource("/fxml/student/QuizCardLayoutFXML.fxml"));
@@ -36,6 +45,7 @@ public class QuizListController implements Initializable {
                 Node node = fxmlLoader.load();
                 QuizCardLayoutFXMLController quizCardLayoutFXMLController = fxmlLoader.getController();
                 quizCardLayoutFXMLController.setQuiz(quiz);
+                quizCardLayoutFXMLController.setStudent(this.student);
                 quizCardLayoutFXMLController.setNoq(quizzes.get(quiz) + "");
                 quizCardLayoutFXMLController.setScreenListener(this.screenListener);
                 quizListContainer.getChildren().add(node);
@@ -50,18 +60,5 @@ public class QuizListController implements Initializable {
         // TODO
         quizzes = Quiz.getAllWithQuestionCount();
         keys = quizzes.keySet();
-//        for (Quiz quiz : keys) {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().
-//                    getResource("/fxml/student/QuizCardLayoutFXML.fxml"));
-//
-//            try {
-//                Node node = fxmlLoader.load();
-//                QuizCardLayoutFXMLController quizCardLayoutFXMLController = fxmlLoader.getController();
-//                quizCardLayoutFXMLController.setTitle(quiz.getTitle());
-//                quizCardLayoutFXMLController.setNoq(quizzes.get(quiz) + "");
-//                quizListContainer.getChildren().add(node);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
     }
 }
