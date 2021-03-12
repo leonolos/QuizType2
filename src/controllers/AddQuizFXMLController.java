@@ -72,7 +72,7 @@ public class AddQuizFXMLController implements Initializable {
         Map<Quiz, List<Question>> data = Quiz.getAll();
         Set<Quiz> quizzes = data.keySet();
 
-        TreeItem root = new TreeItem("Quizzes");
+        TreeItem root = new TreeItem("LISTE DES QUIZ");
         for (Quiz q : quizzes) {
             TreeItem quizTreeItem = new TreeItem(q);
 

@@ -31,11 +31,6 @@
                                     <Insets left="15.0" right="80.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="time" text="Minuteur">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
                           </items>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -90,33 +85,44 @@
                            </VBox.margin>
                         </RadioButton>
                         <Separator layoutX="20.0" layoutY="91.0" prefWidth="200.0" />
-                        <FlowPane prefHeight="29.0" prefWidth="217.0">
+                        <FlowPane prefHeight="28.0" prefWidth="217.0">
                            <children>
                               <Button fx:id="next" mnemonicParsing="false" onAction="#nextQuestions" text="Question suivant">
                                  <FlowPane.margin>
-                                    <Insets left="15.0" right="5.0" />
+                                    <Insets left="10.0" right="5.0" />
                                  </FlowPane.margin>
                               </Button>
                               <Button fx:id="submit" mnemonicParsing="false" onAction="#submit" text="ENREGISTRER" />
                            </children>
                         </FlowPane>
+                        <Label fx:id="time" text="Minuteur">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="80.0" />
+                           </VBox.margin>
+                        </Label>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label layoutX="37.0" layoutY="14.0" text="Quiz">
+                  <Label layoutX="38.0" layoutY="49.0" text="Quiz">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="21.0" layoutY="36.0" text="Progress">
+                  <Label layoutX="9.0" layoutY="22.0" text="Progression">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <FlowPane fx:id="progressPane" hgap="10.0" layoutX="-4.0" layoutY="72.0" prefHeight="524.0" prefWidth="110.0" vgap="10.0">
+                  <FlowPane fx:id="progressPane" hgap="10.0" layoutY="84.0" prefHeight="499.0" prefWidth="110.0" vgap="10.0">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding></FlowPane>

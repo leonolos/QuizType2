@@ -8,9 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableStringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -81,11 +84,61 @@ public class QuestionsScreenFXMLController implements Initializable {
     private Map<Question, String> studentAnswers = new HashMap<>();
     private Integer numberOfRightAnswers = 0;
 
+    //timer fields
+    private long min, sec, hr, totalSec = 0;
+
     //METHODS AND CONSTRUCTOR
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
         this.title.setText(this.quiz.getTitle());
         this.getData();
+    }
+
+    private String format(long value) {
+        if (value < 10) {
+            return 0 + "" + value;
+        }
+        return value + "";
+    }
+
+    public void convertTime() {
+        min = TimeUnit.SECONDS.toMinutes(totalSec);
+        sec = totalSec - (min * 60);
+        hr = TimeUnit.MINUTES.toHours(min);
+        min = min - (hr * 60);
+//        System.out.println(format(hr) + ":" + format(min) + ":" + format(sec));
+        time.setText(format(hr) + ":" + format(min) + ":" + format(sec));
+
+        totalSec--;
+    }
+
+    private void setTimer() {
+        totalSec = this.questionList.size() * 30;
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("After 1 sec...");
+                        convertTime();
+                        if (totalSec <= -1) {
+//                    System.exit(0);
+                            timer.cancel();
+                            time.setText("00:00:00");
+                            Notifications.create()
+                                    .title("Erreur")
+                                    .text("Temps écoulé...")
+                                    .position(Pos.CENTER)
+                                    .showError();
+                        }
+                    }
+                });
+            }
+        };
+//        Timer timer = new Timer();
+        timer.schedule(timerTask, 0, 1000);
     }
 
     private void getData() {
@@ -94,6 +147,7 @@ public class QuestionsScreenFXMLController implements Initializable {
             Collections.shuffle(this.questionList);
             renderProgress();
             setNextQuestion();
+            setTimer();
         }
     }
 
@@ -185,11 +239,6 @@ public class QuestionsScreenFXMLController implements Initializable {
             this.currentQuestion.setOption3(options.get(2));
             this.currentQuestion.setOption4(options.get(3));
 
-//            this.question.setText(this.currentQuestion.getQuestion());
-//            this.option1.setText(options.get(0));
-//            this.option2.setText(options.get(1));
-//            this.option3.setText(options.get(2));
-//            this.option4.setText(options.get(3));
             this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;
         } else {
@@ -222,8 +271,8 @@ public class QuestionsScreenFXMLController implements Initializable {
         QuizResult quizResult = new QuizResult(this.quiz, student, numberOfRightAnswers);
         boolean result = quizResult.save(this.studentAnswers);
         if (result) {
-           Notifications.create()
-                   . title("Message")
+            Notifications.create()
+                    .title("Message")
                     .text("Vous avez réussi le quiz...")
                     .position(Pos.CENTER)
                     .showInformation();
