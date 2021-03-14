@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
+import listeners.NewScreenListener;
 import models.Question;
 import models.Quiz;
 import models.QuizResult;
@@ -75,6 +76,9 @@ public class QuestionsScreenFXMLController implements Initializable {
     @FXML
     private FlowPane progressPane;
 
+    //Listeners
+    private NewScreenListener screenListener;
+
     //NO FXML Fields
     private Quiz quiz;
     private List<Question> questionList;
@@ -87,10 +91,15 @@ public class QuestionsScreenFXMLController implements Initializable {
 
     public void setStudent(Student student) {
         this.student = student;
-    }   
+    }
+
+    public void setScreenListener(NewScreenListener screenListener) {
+        this.screenListener = screenListener;
+    }
 
     //timer fields
     private long min, sec, hr, totalSec = 0;
+    private Timer timer ;
 
     //METHODS AND CONSTRUCTOR
     public void setQuiz(Quiz quiz) {
@@ -117,8 +126,8 @@ public class QuestionsScreenFXMLController implements Initializable {
     }
 
     private void setTimer() {
-        totalSec = this.questionList.size() * 30;
-        Timer timer = new Timer();
+        totalSec = this.questionList.size() * 8;
+        this.timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -269,8 +278,7 @@ public class QuestionsScreenFXMLController implements Initializable {
 
     @FXML
     private void submit(ActionEvent event) {
-        
-        
+
         System.out.println(this.studentAnswers);
         System.out.println(this.student);
 //        Student student = new Student();
@@ -283,6 +291,8 @@ public class QuestionsScreenFXMLController implements Initializable {
                     .text("Vous avez réussi le quiz...")
                     .position(Pos.CENTER)
                     .showInformation();
+            timer.cancel();
+            openResultScreen();
         } else {
             Notifications.create()
                     .title("Erreur")
@@ -292,4 +302,19 @@ public class QuestionsScreenFXMLController implements Initializable {
         }
     }
 
+    private void openResultScreen() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().
+                getResource("/fxml/student/QuizResultFXML.fxml"));
+
+        try {
+            Node node = fxmlLoader.load();
+            QuizResultFXMLController controller = fxmlLoader.getController();
+            controller.setValues(this.studentAnswers, numberOfRightAnswers, quiz, questionList);
+            this.screenListener.removeTopScreen();
+            this.screenListener.changeScreen(node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

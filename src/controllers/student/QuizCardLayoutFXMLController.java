@@ -63,6 +63,7 @@ public class QuizCardLayoutFXMLController implements Initializable {
             QuestionsScreenFXMLController questionsScreenFXMLController = fxmlLoader.getController();
             questionsScreenFXMLController.setStudent(this.student);
             questionsScreenFXMLController.setQuiz(this.quiz);
+            questionsScreenFXMLController.setScreenListener(this.screenListener);
             this.screenListener.changeScreen(node);
         } catch (IOException e) {
             e.printStackTrace();
