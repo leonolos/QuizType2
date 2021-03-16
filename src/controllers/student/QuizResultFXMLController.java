@@ -44,36 +44,41 @@ public class QuizResultFXMLController implements Initializable {
         this.notAttemped = this.questionList.size() - attemped;
 
         setValuesToChart();
+        renderQuestions();
     }
 
-    private void setValuesToChart() {
-        ObservableList<PieChart.Data> attempedData = this.attempedChart.getData();
-        attempedData.add(new PieChart.Data(String.format("Attemped (%d)", this.attemped), this.attemped));
-        attempedData.add(new PieChart.Data(String.format("Not Attemped (%d)", this.notAttemped), this.notAttemped));
-
-        ObservableList<PieChart.Data> scoreChartDatata = this.scoreChart.getData();
-        scoreChartDatata.add(new PieChart.Data(
-                String.format("Right Answers (%d)", this.numberOfRightAnswers), this.numberOfRightAnswers));
-        scoreChartDatata.add(new PieChart.Data(
-                String.format("Wrong Answers (%d)", this.attemped - this.numberOfRightAnswers), this.attemped - this.numberOfRightAnswers));
-
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        for (int i = 0; i < 6; i++) {
+    private void renderQuestions() {
+        for (int i = 0; i < this.questionList.size(); i++) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().
                     getResource("/fxml/student/QuizResultSingleQuestionFXML.fxml"));
 
             try {
                 Node node = fxmlLoader.load();
                 QuizResultSingleQuestionFXMLController controller = fxmlLoader.getController();
+                controller.setValues(this.questionList.get(i), this.userAnswers.get(this.questionList.get(i)));
                 questionsContainer.getChildren().add(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setValuesToChart() {
+        ObservableList<PieChart.Data> attempedData = this.attempedChart.getData();
+        attempedData.add(new PieChart.Data(String.format("Répondu (%d)", this.attemped), this.attemped));
+        attempedData.add(new PieChart.Data(String.format("Pas répondu (%d)", this.notAttemped), this.notAttemped));
+
+        ObservableList<PieChart.Data> scoreChartDatata = this.scoreChart.getData();
+        scoreChartDatata.add(new PieChart.Data(
+                String.format("Réponse vrai (%d)", this.numberOfRightAnswers), this.numberOfRightAnswers));
+        scoreChartDatata.add(new PieChart.Data(
+                String.format("Réponse fausse (%d)", this.attemped - this.numberOfRightAnswers), this.attemped - this.numberOfRightAnswers));
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
     }
 
 }

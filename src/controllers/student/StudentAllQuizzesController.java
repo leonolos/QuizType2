@@ -15,7 +15,7 @@ import javafx.scene.layout.StackPane;
 import listeners.NewScreenListener;
 import models.Student;
 
-public class StudentMainScreenController implements Initializable {
+public class StudentAllQuizzesController implements Initializable {
 
     @FXML
     private Button backButton;

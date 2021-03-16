@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class QuizResult {
@@ -157,7 +158,6 @@ public class QuizResult {
                 ResultSet keys = ps.getGeneratedKeys();
                 if (keys.next()) {
                     this.setId(keys.getInt(1));
-
                     //Now we will save details    
                     System.out.println(this);
                     return saveQuizResultDetails(userAnswers);
@@ -165,10 +165,73 @@ public class QuizResult {
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            ex.printStackTrace();            
+            ex.printStackTrace();
             return false;
         }
         return false;
+    }
+
+    public static Map<QuizResult , Quiz> getQuizzes(Student student) {
+        Map<QuizResult , Quiz> data = new HashMap<>();
+//        String raw = "SELECT QUIZ_RESULTS.id , "
+//                + "QUIZ_RESULTS.RIGHT_ANSWERS ,"
+//                + "QUIZZES.ID as quiz_id ,"
+//                + "QUIZZES.TITLE FROM QUIZ_RESULTS "
+//                + "JOIN QUIZZES on "
+//                + "QUIZ_RESULTS.QUIZ_ID = QUIZZES.ID WHERE student_id = 4";
+
+        String raw = "SELECT %s.%s , "
+                + "%s.%s ,"
+                + "%s.%s as quiz_id ,"
+                + "%s.%s FROM %s "
+                + "JOIN %s on "
+                + "%s.%s = %s.%s WHERE %s = ?";
+
+        String query = String.format(raw,
+                MetaData.TABLE_NAME,
+                MetaData.ID,
+                MetaData.TABLE_NAME,
+                MetaData.RIGHT_ANSWERS,
+                Quiz.MetaData.TABLE_NAME,
+                Quiz.MetaData.QUIZ_ID,
+                Quiz.MetaData.TABLE_NAME,
+                Quiz.MetaData.TITLE,
+                MetaData.TABLE_NAME,
+                Quiz.MetaData.TABLE_NAME,
+                MetaData.TABLE_NAME,
+                MetaData.QUIZ_ID,
+                Quiz.MetaData.TABLE_NAME,
+                Quiz.MetaData.QUIZ_ID,
+                MetaData.STUDENT_ID
+        );
+        
+        try {
+            String connectionUrl = DatabaseConstants.CONNECTION_URL;
+            Class.forName(DatabaseConstants.DRIVER_CLASS);
+            Connection connection;
+            connection = DriverManager.getConnection(connectionUrl);
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, student.getId());
+            ResultSet result = ps.executeQuery();
+            
+            while (result.next()){
+                QuizResult quizResult = new QuizResult();
+                quizResult.setId(result.getInt(1));
+                quizResult.setRightAnswers(result.getInt(2));
+                
+                Quiz quiz = new Quiz();
+                quiz.setQuizId(result.getInt(3));
+                quiz.setTitle(result.getString(4));
+                
+                data.put(quizResult, quiz);                            
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return data;
+
     }
 
     private boolean saveQuizResultDetails(Map<Question, String> userAnswers) {
