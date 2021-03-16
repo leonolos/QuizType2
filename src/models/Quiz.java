@@ -1,9 +1,11 @@
 package models;
 
+import constants.DatabaseConstants;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,7 +189,7 @@ public class Quiz {
     public static Map<Quiz, Integer> getAllWithQuestionCount() {
         Map<Quiz, Integer> quizes = new HashMap<>();
         Quiz key = null;
-        
+
         //SELECT quizs.quiz_id, title, 
         //COUNT(*) as question_count 
         //FROM quizs join questions on questions.quiz_id=quizs.quiz_id 
@@ -237,8 +239,9 @@ public class Quiz {
 
     // get questions Using Quiz (Obtenir des questions à l'aide du quiz
     public List<Question> getQuestions() {
-        List<Question> quizes = new ArrayList<>();
         
+        List<Question> quizes = new ArrayList<>();
+
 //        SELECT 
         String query = String.
                 format("SELECT "
@@ -247,7 +250,6 @@ public class Quiz {
                         + "%s, %s,"
                         + "%s "
                         + "FROM %s where %s=?",
-                        
                         Question.MetaData.QUESTION_ID,
                         Question.MetaData.QUESTION,
                         Question.MetaData.OPTION1,
@@ -255,10 +257,8 @@ public class Quiz {
                         Question.MetaData.OPTION3,
                         Question.MetaData.OPTION4,
                         Question.MetaData.ANSWER,
-                        
                         Question.MetaData.TABLE_NAME,
                         Question.MetaData.QUIZ_ID
-                        
                 );
         String connectionUrl = "jdbc:sqlite:src/models/dbKiz111.db";
         System.out.println(query);
@@ -268,10 +268,10 @@ public class Quiz {
             try (Connection connection = DriverManager.getConnection(connectionUrl)) {
 
                 PreparedStatement ps = connection.prepareStatement(query);
-                ps.setInt(1,this.quizId);
+                ps.setInt(1, this.quizId);
                 ResultSet result = ps.executeQuery();
 
-                while (result.next()) {            
+                while (result.next()) {
                     Question tempQuestion = new Question();
                     tempQuestion.setQuestionId(result.getInt(1));
                     tempQuestion.setQuestion(result.getString(2));
@@ -290,7 +290,34 @@ public class Quiz {
         return quizes;
     }
 
+    public Integer getNumberOfQuestions() {
+//        String raw = "SELECT count(*) from QUESTIONS WHERE quiz_id = ?";
+        String raw = "SELECT count(*) from %s WHERE %s = ?";
+        String query = String.format(raw,
+                Question.MetaData.TABLE_NAME,
+                Question.MetaData.QUIZ_ID);
+
+        try {
+            Class.forName(DatabaseConstants.DRIVER_CLASS);
+            Connection connection = DriverManager
+                    .getConnection(DatabaseConstants.CONNECTION_URL);
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, this.quizId);
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+                return result.getInt(1);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     
+   
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import models.Quiz;
 import models.QuizResult;
@@ -18,9 +20,22 @@ import models.Student;
 public class AttempedQuizListScreenFXMLController implements Initializable {
 
     @FXML
-    private VBox list;
-    private Student student;
+    private VBox list;    
+    @FXML
+    private Label total;
+    @FXML
+    private Label Aq;
+    @FXML
+    private Label ra;
+    @FXML
+    private Label wa;
+    @FXML
+    private PieChart attempedChart;
+    @FXML
+    private PieChart rightWrongChart;
 
+    private Student student;
+    
     public void setStudent(Student student) {
         this.student = student;
         

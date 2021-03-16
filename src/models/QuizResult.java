@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -169,9 +170,36 @@ public class QuizResult {
             return false;
         }
         return false;
-    }
+    }         
+     
+    public Integer getNumberOfAttempedQuestions() {
+//        String raw = "SELECT COUNT(*) FROM QUIZ_RESULT_DETAILS WHERE quiz_result_id = ? ";
+        String raw = "SELECT COUNT(*) FROM %s WHERE %s = ? ";
+        String query = String.format(raw,
+                QuizResultDetails.MetaData.TABLE_NAME,
+                QuizResultDetails.MetaData.QUIZ_RESULT_ID);
 
+        try {
+            Class.forName(DatabaseConstants.DRIVER_CLASS);
+            Connection connection = DriverManager
+                    .getConnection(DatabaseConstants.CONNECTION_URL);
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, this.getId());
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+                return result.getInt(1);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
     public static Map<QuizResult , Quiz> getQuizzes(Student student) {
+        
         Map<QuizResult , Quiz> data = new HashMap<>();
 //        String raw = "SELECT QUIZ_RESULTS.id , "
 //                + "QUIZ_RESULTS.RIGHT_ANSWERS ,"
